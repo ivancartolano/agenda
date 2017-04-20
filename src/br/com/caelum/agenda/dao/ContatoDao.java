@@ -99,4 +99,28 @@ public class ContatoDao {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public Contato getContato(long id){
+		try{
+			PreparedStatement stmt = this.connection.prepareStatement("select * from contatos where id= ?");
+			stmt.setLong(1, id);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			
+			Contato c = new Contato();
+			c.setId(rs.getLong("id"));
+			c.setNome(rs.getString("nome"));
+			c.setEmail(rs.getString("email"));
+			c.setEndereco(rs.getString("endereco"));
+			
+			Calendar data = Calendar.getInstance();
+			data.setTime(rs.getDate("dataNascimento"));
+			c.setDataNascimento(data);
+			
+			
+			return c;
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
